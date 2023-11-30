@@ -7,6 +7,7 @@ from skimage.transform import hough_line, hough_line_peaks
 from skimage import transform
 import numpy as np
 import cv2
+
 from paquo.projects import QuPathProject
 
 def get_slide_path(data_dir):

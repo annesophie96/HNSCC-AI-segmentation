@@ -10,7 +10,7 @@ from metrics import *  # Import all functions from metrics module
 data_dir = 'D:/Hamed/Forschungsproject/Hancock 1/Tiles_0.9_256_176ov_all'
 
 # Load the model with custom metrics and loss functions
-model_T16 = load_model('D:/Hamed/Forschungsproject/Hancock 2/16MIT_results/model_T16EFF',
+model_T16 = load_model('./model_T16EFF',
                        custom_objects={'CategoricalCELoss': WCat, 'ch_0': ch_0, 'ch_1': ch_1,
                                        'ch_2': ch_2, 'ch_3': ch_3})
 
