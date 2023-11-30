@@ -6,4 +6,17 @@ The manual annotations available were sparse, posing a significant challenge. As
 We thoroughly engineered a pipeline that included Python pre-processing techniques like normalization, class refinement and augmentation and Groovy programming language for tile extraction. Our research into Unet variants led us to choose an efficientnetb0 backbone to speed up training. This decision was influenced by pre-training strategies that guided the model toward convergence while optimizing tumor detection in a four- class segmentation problem. The evaluation metrics were selected with care to prioritize intersection over union, reflecting the clinical emphasis on tumor classification.
 We used an overlap-tile strategy for predictions during the inference phase, with a 16-fold overlap to ensure comprehensive coverage and diverse perspectives. To refine the final predictions, post-processing methods such as kernel-based smoothing and morphological operations were used. Our findings can be seen in a set of models, each with its own filter sizes, overlapping strategies, and varied use of kernels.
 
-There are 3 folders. 'training' which the model training process happens in it. the 'gif_making' which makes a smaller data set and makes a gif through each epoch of the training. The 'inference' part which would gets whole slides as input and and return the predicted cancer segments into qupath automatically. 
+
+inference... 
+Setup: 
+1. First you have to define the qupath directory in the config/.paqou.toml. just open the file and change the qupath_dir. 
+2. setup the env. You can find the needed packages in environment.yml.
+
+Steps:
+1. Create a qupath project and add the slides.
+2. Export tiles using all_tile_extractor_overlap16.groovy.
+3. In the inference code define the following paths:
+  1. Define the path to the slides. data_dir = '...QupathProject/Tiles_0.9_256_176ov_all'
+  2. Define the path to the qupath project. qp = '.../QupathProject.qpproj'
+   
+Run the code! after code is finished you would have 4 different annotations with different filtering factors. you could adjust this in the inference code if need
