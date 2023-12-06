@@ -7,8 +7,10 @@ from skimage.transform import hough_line, hough_line_peaks
 from skimage import transform
 import numpy as np
 import cv2
-
+from tqdm import tqdm
+import re
 from paquo.projects import QuPathProject
+
 
 def get_slide_path(data_dir):
     """
@@ -24,6 +26,7 @@ def get_slide_path(data_dir):
     for filename in natsorted(os.listdir(data_dir)):
         x.append(os.path.join(data_dir, filename))
     return x
+
 
 def get_image_path(data_dir):
     """
@@ -73,7 +76,7 @@ def get_dim(data_dir):
                 return height, width
 
 
-def test_qupath_annotation(qupath_project, slide_path, image, scaling_factor=4.627844195912071, model='?'):
+def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_factor=4.627844195912071, model='?'):
     """
     Adds annotations to a QuPath project based on contours detected in an image.
 
@@ -113,13 +116,6 @@ def test_qupath_annotation(qupath_project, slide_path, image, scaling_factor=4.6
                     print("No valid contours found.")
                     return
 
-                # Get the bounding box of the annotation
-                min_x, min_y, max_x, max_y = multipolygon.bounds
-
-                # Calculate rotation angle (keeping it 0 for now)
-                rotation_angle = 90  # Adjust the rotation angle as needed
-
-                # Mirror on y-axis, rotate, and scale the annotation
                 # Scale the annotation
                 scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
 

@@ -2,6 +2,8 @@ from tensorflow.keras.models import load_model
 import argparse
 import cv2
 
+from segmentation_models.losses import *
+
 from funcs import (
     get_slide_path,
     get_image_path,
@@ -19,7 +21,9 @@ from metrics import (
     ch_3
 )
 
+
 def main(data_dir, model_path, qp):
+    WCat = CategoricalCELoss(class_weights=[0, 1, 1, 1])
 
     # Load the model with custom metrics and loss functions
     model_T16 = load_model(model_path,
@@ -42,18 +46,17 @@ def main(data_dir, model_path, qp):
         print('width =', width, 'height =', height)
 
         # Perform prediction on images with an overlap, using the loaded model
+        print(f'predict tiles in {slide_path}')
         pred_normal16 = pred_images_overlap(tiles, batch_size=100, height=height, width=width,
                                             overlap=16, model=model_T16)
 
         # Calculate the modes from the predictions
+        print('Calculating the mode')
         modes = cal_mode(pred_normal16, height, width)
-        print('Modes Done')
-
-        # Output the path of the current slide being processed
-        print(slide_path)
 
         # Test and annotate the predictions in QuPath project
-        test_qupath_annotation(qp, slide_path, modes, model='model_T16_Ov16')
+        print('importing raw prediction to qupath')
+        test_qupath_annotation(data_dir, qp, slide_path, modes, model='model_T16_Ov16')
 
         # Apply morphological operations at different kernel sizes to the prediction
         for i in [15, 30, 50]:
@@ -70,7 +73,10 @@ def main(data_dir, model_path, qp):
             filtered = cv2.erode(filtered, kernel, iterations=1)
 
             # Annotate the processed predictions in QuPath project with the kernel size in the model name
-            test_qupath_annotation(qp, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
+            print(f'importing filtered prediction K={i} to qupath')
+            test_qupath_annotation(data_dir, qp, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
+        break
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process image tiles and perform predictions and infer to qupath.")
