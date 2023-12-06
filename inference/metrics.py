@@ -7,23 +7,6 @@ from segmentation_models.losses import *
 # The zeroth class is weighted as 0 (usually representing a background class that might be ignored).
 WCat = CategoricalCELoss(class_weights=[0, 1, 1, 1])
 
-# Define the Intersection over Union (IoU) score as a metric for each class.
-# The IoU score is a common evaluation metric for tasks like semantic segmentation.
-metric = IOUScore()
-IOUscore0 = IOUScore(class_indexes=0, name='IOU_Not_Annotated')  # IoU for the 'Not_Annotated' class
-IOUscore1 = IOUScore(class_indexes=1, name='IOU_Tumor')  # IoU for the 'Tumor' class
-IOUscore2 = IOUScore(class_indexes=2, name='IOU_Other')  # IoU for the 'Other' class
-IOUscore3 = IOUScore(class_indexes=3, name='IOU_White_BG')  # IoU for the 'White_BG' class
-
-# Register the custom IoU metrics for each class in custom_objects to allow for serialization and deserialization.
-# This is useful when saving and loading the model that uses these custom metrics.
-custom_objects = {
-    'IOU_Not_Annotated': IOUscore0,
-    'IOU_Tumor': IOUscore1,
-    'IOU_Other': IOUscore2,
-    'IOU_White_BG': IOUscore3
-}
-
 
 def calculate_intersection(class_index, pred_mask, true_mask):
     """
