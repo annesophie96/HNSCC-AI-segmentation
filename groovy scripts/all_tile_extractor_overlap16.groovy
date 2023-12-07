@@ -21,8 +21,9 @@ new TileExporter(imageData)
     .downsample(downsample)     // Define export resolution
     .imageExtension('.png')     // Define file extension for original pixels (often .tif, .jpg, '.png' or '.ome.tif')
     .tileSize(256)              // Define size of each tile, in pixels
-    //.labeledServer(labelServer) // Define the labeled image server to use (i.e. the one we just built)
-    .annotatedTilesOnly(false)// If true, only export tiles if there is a (labeled) annotation present
+    // In case there is ROI turn this on!!
+    .annotatedTilesOnly(false)// If true, only export tiles if there is a (labeled) annotation present.
+    //
     .overlap(176)                // Define overlap, in pixel units at the export resolution
     .writeTiles(pathOutput)     // Write tiles to the specified directory
 
@@ -30,7 +31,7 @@ new TileExporter(imageData)
 def Height = imageData.getServer().getMetadata().getHeight()
 def Width = imageData.getServer().getMetadata().getWidth()
 //
-//
+//This part extracts a txt file for the sslide dimension
 if (imageData && imageData.getServer() && imageData.getServer().getMetadata()) {
     def height = imageData.getServer().getMetadata().getHeight()
     def width = imageData.getServer().getMetadata().getWidth()

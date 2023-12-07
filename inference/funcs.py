@@ -124,7 +124,7 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
                 # Add annotation to the QuPath project
                 annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
                                                                path_class=qpout.path_classes[0])
-            
+
                 annotation.name = model
 
 
