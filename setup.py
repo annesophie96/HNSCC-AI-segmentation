@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Tumor Detector in qupath',
+    name='tdqu', # Tumor + detector + qupath
     version='1.0.0',
     author='Mohammadhamed Mirbagheri',
     author_email='hamed.mirbagheri@fau.de',
