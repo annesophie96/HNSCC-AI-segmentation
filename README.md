@@ -1,13 +1,18 @@
-# Histo_Unet
-This Code explores semantic segmentation to optimize sparsely annotated histology image analysis for head and neck cancer.
+## Histo_Unet
+# Short Abstract
+This project develops an automated system for segmenting tumor tissues in H&E-stained tongue carcinoma slides, crucial in HNSCC analysis. We overcame sparse manual annotations by focusing on semantic segmentation and semi-ground truth. Utilizing Python and Groovy, our pipeline features an efficientnetb0 backbone in a Unet-based model. For this purpose 'training' and 'gif making' was used. The resulting Model can be found in 'model_T16EFF'.
 
-The precise segmentation of cancerous tissues in histology images is critical in medical diagnostics, particularly in the context of head and neck squamous cell carcinoma (HNSCC). This project focuses on tissue segmentation in carcinoma of the tongue slides stained with Hematoxylin and Eosin (H&E) and then digitized for analysis. Our goal was to create an automated system capable of high-quality tumor tissue segmentation, allowing us to export our predictions to QuPath for further analysis by medical professionals. This step is critical in analyzing tumor growth and infiltration patterns, which are important predictors of patient outcome.
-The manual annotations available were sparse, posing a significant challenge. As a result, we focused on semantic segmentation on these sparsely annotated images, with a special emphasis on the central tumor as the region of interest (ROI). To address the absence of detailed annotations, we introduced the concept of semi-ground truth—a methodology that recognizes the incomplete and uncertain nature of the available ground truth data, which informed the development and training of our models.
-We thoroughly engineered a pipeline that included Python pre-processing techniques like normalization, class refinement and augmentation and Groovy programming language for tile extraction. Our research into Unet variants led us to choose an efficientnetb0 backbone to speed up training. This decision was influenced by pre-training strategies that guided the model toward convergence while optimizing tumor detection in a four- class segmentation problem. The evaluation metrics were selected with care to prioritize intersection over union, reflecting the clinical emphasis on tumor classification.
-We used an overlap-tile strategy for predictions during the inference phase, with a 16-fold overlap to ensure comprehensive coverage and diverse perspectives. To refine the final predictions, post-processing methods such as kernel-based smoothing and morphological operations were used. Our findings can be seen in a set of models, each with its own filter sizes, overlapping strategies, and varied use of kernels.
+## Usage
+# Groovy
+There Exists 4 files. In qupath open the project with the slides in it. click on the automate dropdown then show script editor. import the scripts there andd use accordingly.
+
+- 'all_tile_extractor_overlap16': Is used to to extract all tiles in the slide. If there is a region of interest (ROI) there must be a flag changed to true (it is indicated in the code). later we usse these tiles to infer the prediction back to qupath.
+- 'anno_extractor': In case there are other 
+
+# Inference 
 
 
-inference... 
+
 Setup: 
 1. First you have to define the qupath directory in the config/.paqou.toml. just open the file and change the qupath_dir. 
 2. setup the env. You can find the needed packages in environment.yml.
