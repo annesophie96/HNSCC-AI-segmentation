@@ -1,8 +1,8 @@
 from tensorflow.keras.models import load_model
 import argparse
 import cv2
-
-from segmentation_models.losses import *
+import numpy as np
+from segmentation_models.losses import CategoricalCELoss
 
 from funcs import (
     get_slide_path,
@@ -37,16 +37,16 @@ def main(data_dir, model_path, qp):
     for slide_path in get_slide_path(data_dir):
 
         tiles = get_image_path(slide_path)  # Retrieve paths for image tiles
-        print('Number of images =', len(tiles))
+
 
         # Get dimensions of the slide and adjust according to scaling factor
         height, width = get_dim(slide_path)
         height = int(height // scaling_factor)
         width = int(width // scaling_factor)
-        print('width =', width, 'height =', height)
+        print('Number of images =', len(tiles),'width =', width, 'height =', height)
 
         # Perform prediction on images with an overlap, using the loaded model
-        print(f'predict tiles in {slide_path}')
+        print(f'Predicting tiles in ...{slide_path[-20:-1]}')
         pred_normal16 = pred_images_overlap(tiles, batch_size=100, height=height, width=width,
                                             overlap=16, model=model_T16)
 
@@ -55,17 +55,16 @@ def main(data_dir, model_path, qp):
         modes = cal_mode(pred_normal16, height, width)
 
         # Test and annotate the predictions in QuPath project
-        print('importing raw prediction to qupath')
+        print('Importing raw prediction to qupath')
         test_qupath_annotation(data_dir, qp, slide_path, modes, model='model_T16_Ov16')
 
         # Apply morphological operations at different kernel sizes to the prediction
         for i in [15, 30, 50]:
-            # Define the structuring element (kernel)
+            # Define the structuring element
             kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (i, i))
 
             # Filter the prediction for a specific class (assuming class 1 here)
             filtered = (modes == 1).astype(np.uint8)
-
             # Apply erosion followed by dilation (opening) and then dilation followed by erosion (closing)
             filtered = cv2.erode(filtered, kernel, iterations=1)
             filtered = cv2.dilate(filtered, kernel, iterations=1)
@@ -73,10 +72,10 @@ def main(data_dir, model_path, qp):
             filtered = cv2.erode(filtered, kernel, iterations=1)
 
             # Annotate the processed predictions in QuPath project with the kernel size in the model name
-            print(f'importing filtered prediction K={i} to qupath')
+            print(f'Importing filtered prediction K = {i} to qupath')
             test_qupath_annotation(data_dir, qp, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
-        break
 
+        print('**********SLIDE PREDICTION DONE**********')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process image tiles and perform predictions and infer to qupath.")

@@ -97,11 +97,13 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
         entry = qpout.images
         for i in range(len(entry)):
             if os.path.join(data_dir, entry[i].image_name) == slide_path + '.svs':
-                print('Found a match!')
+                print('Found the slide in qupath!')
                 contour_binary_mask = (image == 1).astype(np.uint8)
+
 
                 # Assuming you have contours already extracted
                 contours, hierarchy = cv2.findContours(contour_binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
 
                 # Convert the contours to a list of Shapely polygons
                 # check if its a list and change the -1
@@ -122,6 +124,7 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
                 # Add annotation to the QuPath project
                 annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
                                                                path_class=qpout.path_classes[0])
+            
                 annotation.name = model
 
 
