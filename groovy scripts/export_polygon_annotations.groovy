@@ -1,4 +1,4 @@
-def output_dir = "C:/Data/Documents/Hamed research project/Example data from Daniel/polygon_annotations/"
+def output_dir = buildFilePath(PROJECT_BASE_DIR, 'Polygon_annotations', name)
 
 // Get slide name
 def imageServer = getCurrentImageData().getServer()

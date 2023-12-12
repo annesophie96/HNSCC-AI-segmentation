@@ -20,18 +20,17 @@ from metrics import (
     ch_2,
     ch_3
 )
+import warnings
 
-
-def main(data_dir, model_path, qp):
+def main(data_dir, model_path, qp, scaling_factor = 4.627844195912071):
     WCat = CategoricalCELoss(class_weights=[0, 1, 1, 1])
+    warnings.filterwarnings("ignore")
 
     # Load the model with custom metrics and loss functions
     model_T16 = load_model(model_path,
                            custom_objects={'CategoricalCELoss': WCat, 'ch_0': ch_0, 'ch_1': ch_1,
                                            'ch_2': ch_2, 'ch_3': ch_3})
 
-    # Scaling factor for image dimensions
-    scaling_factor = 4.627844195912071
 
     # Iterate over slide paths retrieved from the data directory
     for slide_path in get_slide_path(data_dir):
@@ -78,10 +77,12 @@ def main(data_dir, model_path, qp):
         print('**********SLIDE PREDICTION DONE**********')
 
 if __name__ == "__main__":
+    
     parser = argparse.ArgumentParser(description="Process image tiles and perform predictions and infer to qupath.")
     parser.add_argument("--data_dir", required=True, help="Path to the slides")
     parser.add_argument("--model_path", required=True, help="Path to the trained model file")
     parser.add_argument("--qp", required=True, help="Path to the QuPath project file")
+    parser.add_argument("--scaling_factor", required=False, help="Scaling factor", default=4.627844195912071)
     args = parser.parse_args()
 
-    main(args.data_dir, args.model_path, args.qp)
+    main(args.data_dir, args.model_path, args.qp, args.scaling_factor)
