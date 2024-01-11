@@ -8,7 +8,7 @@ echo It will also try to register the Python executable to your machine's Path v
 echo If the environment activator or inference batch script do not work, please register the Path manually.
 echo For more information, please see here: https://realpython.com/add-python-to-path/
 
-winget install -e -i --id=Python.Python.3.9 --source=winget --scope=machine
+winget install -e -i --id Python.Python.3.9 --source=winget --scope=machine
 
 set /a tempvar=0
 
