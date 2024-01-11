@@ -30,7 +30,7 @@ if not exist .venv\Scripts\activate.bat (
 set "parentdir=!parentdir:\=/!"
 set "projectdir=!projectdir:\=/!"
 echo !parentdir!
-echo !projectdir!
+echo !projectdir!/!projectname!
 
 call .venv\Scripts\activate.bat && where python && python "inference/inference_main.py" --data_dir "!projectdir!/tiles" --model_path "!parentdir!/model" --qp "!projectdir!/!projectname!"
 
