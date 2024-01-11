@@ -6,7 +6,7 @@ title Environment configurator
 if not exist .venv\Scripts\activate.bat (
 	py -3.9 -m venv .venv
 )
-call .venv\Scripts\activate.bat && where python && py -3.9 -m pip install --upgrade pip && py -3.9 -m pip --version && py -3.9 -m pip install -r requirements.txt
+call .venv\Scripts\activate.bat && where python && py -m pip install --upgrade pip && py -m pip --version && py -m pip install -r requirements.txt
 
 set parentdir=%~dp0
 set "parentdir=!parentdir:\=/!"
