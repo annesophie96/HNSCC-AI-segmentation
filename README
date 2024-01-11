@@ -4,6 +4,8 @@
 	Note: If you run 01-install-python.bat, this should already be registered for you automatically.
 3. Setup your python environment via running 02-configure-environment.bat
 	Note: If you press Y at the end of 01-install-python.bat, this will run automatically
+	Do NOT change your local repository's folder name!
+	If you do so, please delete the .venv folder and run 02-configure-environment.bat again!
 4. (Optional) Set your QuPath installation path in config/.paquo.toml
 	Note: If you run 02-configure-environment.bat, this should already be configured for you automatically.
 	In case it is not, please make sure to set it manually.	Make sure to only use forward slashes (/) in your path!
@@ -16,4 +18,5 @@
 	Run "all_tile_extractor_overlap16.groovy"
 7. Run 03-inference.bat
 	Note: If you press Y at the end of 02-configure-environment.bat, this will run automatically
-	
+	Paste your QuPath project's path when prompted.
+	You can also include the project's name, e.g. if you have multiple .qpproj files in the same folder.
