@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 title Environment configurator
 
 if not exist .venv\Scripts\activate.bat (
-	py -3.9 -m venv .venv
+	py -m venv .venv
 )
 call .venv\Scripts\activate.bat && where python && py -m pip install --upgrade pip && py -m pip --version && py -m pip install -r requirements.txt
 
