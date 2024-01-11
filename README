@@ -1,0 +1,19 @@
+1. Install Python 3.7 or newer via running 01-install-python.bat
+	You can also manually install it from here: https://www.python.org/ftp/python/3.12.1/python-3.12.1-amd64.exe
+2. (Optional) Register Python to your Windows Path: https://realpython.com/add-python-to-path/
+	Note: If you run 01-install-python.bat, this should already be registered for you automatically.
+3. Setup your python environment via running 02-configure-environment.bat
+	Note: If you press Y at the end of 01-install-python.bat, this will run automatically
+4. (Optional) Set your QuPath installation path in config/.paquo.toml
+	Note: If you run 02-configure-environment.bat, this should already be configured for you automatically.
+	In case it is not, please make sure to set it manually.	Make sure to only use forward slashes (/) in your path!
+	Example:
+		qupath_dir = "C:/Users/<your_username>/AppData/Local/QuPath-0.5.0"
+5. Make a QuPath project and make a named ROI
+	Tip: select only parts of the image that contain tissue
+6. Export tiles from ROI by script
+	Tip: register groovy script folder in your QuPath settings (Automate -> Shared scripts -> Set script directory)
+	Run "all_tile_extractor_overlap16.groovy"
+7. Run 03-inference.bat
+	Note: If you press Y at the end of 02-configure-environment.bat, this will run automatically
+	

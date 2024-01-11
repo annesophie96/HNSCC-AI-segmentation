@@ -1,0 +1,100 @@
+{
+  "pathClasses": [
+    {
+      "name": "Tumor",
+      "color": -3670016
+    },
+    {
+      "name": "Stroma",
+      "color": -6895466
+    },
+    {
+      "name": "Immune cells",
+      "color": -6268256
+    },
+    {
+      "name": "Necrosis",
+      "color": -13487566
+    },
+    {
+      "name": "Other",
+      "color": -14336
+    },
+    {
+      "name": "Region*",
+      "color": -16777036
+    },
+    {
+      "name": "Ignore*",
+      "color": -4934476
+    },
+    {
+      "name": "Positive",
+      "color": -377282
+    },
+    {
+      "name": "Negative",
+      "color": -9408287
+    },
+    {
+      "name": "Verhornung",
+      "color": -8730579
+    },
+    {
+      "name": "Knorpel",
+      "color": -4578359
+    },
+    {
+      "name": "Blut",
+      "color": -15479710
+    },
+    {
+      "name": "Lockeres Bindegewebe",
+      "color": -6794748
+    },
+    {
+      "name": "Zellreiches Stroma",
+      "color": -4039242
+    },
+    {
+      "name": "stromazellen",
+      "color": -11657831
+    },
+    {
+      "name": "Fettgewebe",
+      "color": -9757694
+    },
+    {
+      "name": "Markierung",
+      "color": -2367829
+    },
+    {
+      "name": "Gefäß",
+      "color": -13302297
+    },
+    {
+      "name": "Muskel",
+      "color": -8131847
+    },
+    {
+      "name": "Muskel längs",
+      "color": -3886578
+    },
+    {
+      "name": "Nerv",
+      "color": -5770733
+    },
+    {
+      "name": "granulation",
+      "color": -15474860
+    },
+    {
+      "name": "cauter",
+      "color": -11455458
+    },
+    {
+      "name": "tumorcells",
+      "color": -11904385
+    }
+  ]
+}
