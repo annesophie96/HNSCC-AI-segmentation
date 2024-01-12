@@ -35,3 +35,4 @@ echo !projectdir!/!projectname!
 call .venv\Scripts\activate.bat && where python && python "inference/inference_main.py" --data_dir "!projectdir!/tiles" --model_path "!parentdir!/model" --qp "!projectdir!/!projectname!"
 
 set /p=Hit ENTER to continue...
+exit 0

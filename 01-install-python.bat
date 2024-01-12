@@ -3,12 +3,12 @@ setlocal enabledelayedexpansion
 
 title Python auto-installer
 
-echo This tool will install Python 3.9 on your computer if it is not installed yet.
+echo This tool will install Python 3.10 on your computer.
 echo It will also try to register the Python executable to your machine's Path variable. This way, Python commands should be executable automatically.
 echo If the environment activator or inference batch script do not work, please register the Path manually.
 echo For more information, please see here: https://realpython.com/add-python-to-path/
 
-winget install -e -i --id Python.Python.3.9 --source=winget --scope=machine --force
+winget install -e -i --id Python.Python.3.10 --source=winget --scope=machine --force
 
 set /a tempvar=0
 
