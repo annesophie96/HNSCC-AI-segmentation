@@ -2,6 +2,7 @@ from tensorflow.keras.models import load_model
 import argparse
 import cv2
 import numpy as np
+import json
 from segmentation_models.losses import CategoricalCELoss
 
 from funcs import (
@@ -52,7 +53,11 @@ def main(data_dir, model_path, qp, scaling_factor = 4.627844195912071):
         # Calculate the modes from the predictions
         print('Calculating the mode')
         modes = cal_mode(pred_normal16, height, width)
-
+        
+        # Dump modes to file
+        with open('data.json', 'w') as f:
+        json.dump(modes, f)
+        
         # Test and annotate the predictions in QuPath project
         print('Importing raw prediction to qupath')
         test_qupath_annotation(data_dir, qp, slide_path, modes, model='model_T16_Ov16')
