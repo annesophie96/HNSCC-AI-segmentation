@@ -56,7 +56,7 @@ def main(data_dir, model_path, qp, scaling_factor = 4.627844195912071):
         
         # Dump modes to file
         with open('data.json', 'w') as f:
-        json.dump(modes, f)
+            json.dump(modes, f)
         
         # Test and annotate the predictions in QuPath project
         print('Importing raw prediction to qupath')
