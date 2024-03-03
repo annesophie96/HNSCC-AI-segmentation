@@ -96,7 +96,7 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
         # Get first slide
         entry = qpout.images
         for i in range(len(entry)):
-            if os.path.join(data_dir, entry[i].image_name) == slide_path + '.mrxs':
+            if os.path.join(data_dir, entry[i].image_name) == slide_path + '.svs':
                 print('Found the slide in qupath!')
                 contour_binary_mask = (image == 1).astype(np.uint8)
 
