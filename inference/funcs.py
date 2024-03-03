@@ -96,37 +96,6 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
         # Get first slide
         entry = qpout.images
         for i in range(len(entry)):
-            if os.path.join(data_dir, entry[i].image_name) == slide_path + '.svs':
-                print('Found the slide in qupath!')
-                contour_binary_mask = (image == 1).astype(np.uint8)
-
-
-                # Assuming you have contours already extracted
-                contours, hierarchy = cv2.findContours(contour_binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-
-
-                # Convert the contours to a list of Shapely polygons
-                # check if its a list and change the -1
-                polygons = [Polygon(contour.reshape(-1, 2)[:, ::1]) for contour in contours if len(contour) >= 3]
-
-                # Create a MultiPolygon if there is more than one contour
-                if len(polygons) > 1:
-                    multipolygon = MultiPolygon(polygons)
-                elif len(polygons) == 1:
-                    multipolygon = polygons[0]
-                else:
-                    print("No valid contours found.")
-                    return
-
-                # Scale the annotation
-                scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
-
-                # Add annotation to the QuPath project
-                annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
-                                                               path_class=qpout.path_classes[0])
-
-                annotation.name = model
-####
             if os.path.join(data_dir, entry[i].image_name) == slide_path + '.mrxs':
                 print('Found the slide in qupath!')
                 contour_binary_mask = (image == 1).astype(np.uint8)
@@ -157,7 +126,6 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
                                                                path_class=qpout.path_classes[0])
 
                 annotation.name = model
-####
 
 
 def count_straight_lines_probabilistic_hough(image, threshold=40, min_line_length=100, max_line_gap=10):
