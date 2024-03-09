@@ -151,7 +151,7 @@ def export_geojson(data_dir, slide_path, image, scaling_factor=4.627844195912071
     # check if its a list and change the -1
     polygons = [Polygon(contour.reshape(-1, 2)[:, ::1]) for contour in contours if len(contour) >= 3]
     
-    print("Slide name: "+slide_path.split('/')[-1].split('.').[0])
+    print("Slide name: "+slide_path.split('/')[-1].split('.')[0])
 
     # Create a MultiPolygon if there is more than one contour
     if len(polygons) > 1:
@@ -164,7 +164,7 @@ def export_geojson(data_dir, slide_path, image, scaling_factor=4.627844195912071
 
     # Scale the annotation
     scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
-    filename = data_dir + "/" + slide_path.split('/')[-1].split('.').[0] + "/" + slide_path.split('/')[-1].split('.').[0] + "_" + model + ".json"
+    filename = data_dir + "/" + slide_path.split('/')[-1].split('.')[0] + "/" + slide_path.split('/')[-1].split('.')[0] + "_" + model + ".json"
                 
     #Create importable geojson
     json_polygon = geojson.dumps(scaled_multipolygon)
