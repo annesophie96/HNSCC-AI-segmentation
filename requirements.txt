@@ -1,5 +1,6 @@
 shapely==2.0.2
 geos==0.2.3
+geojson==3.1.0
 paquo==0.7.1
 jpype1==1.5.0
 dynaconf==3.2.4,!=3.1.0,!=3.1.7

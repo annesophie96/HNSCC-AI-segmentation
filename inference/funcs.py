@@ -10,7 +10,7 @@ import cv2
 from tqdm import tqdm
 import re
 from paquo.projects import QuPathProject
-
+import geojson
 
 def get_slide_path(data_dir):
     """
@@ -120,13 +120,23 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
 
                 # Scale the annotation
                 scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
+                filename = data_dir + "/" + entry[i].image_name.split(".")[0] + "/" + entry[i].image_name.split(".")[0] + "_" + model + ".json"
+                
+                #Create importable geojson
+                json_polygon = geojson.dumps(scaled_multipolygon)
+                outstring = '{"type":"Feature","properties":{"objectType": "annotation","name":"' + model + '","classification":{"name":"Tumor","color":[200,0,0]}},"geometry":' + json_polygon + '}'
+                
+                with open(filename, 'w') as outfile:
+                    outfile.write(outstring)
 
-                # Add annotation to the QuPath project
-                annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
-                                                               path_class=qpout.path_classes[0])
-
-                annotation.name = model
-
+                try:
+                    # Add annotation to the QuPath project
+                    annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
+                    path_class=qpout.path_classes[0])
+                    annotation.name = model
+                    
+                except:
+                    print('Cannot write '+entry[i].image_name+' , please import from JSON!')
 
 def count_straight_lines_probabilistic_hough(image, threshold=40, min_line_length=100, max_line_gap=10):
     """
