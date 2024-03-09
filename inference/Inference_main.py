@@ -11,6 +11,7 @@ from funcs import (
     test_qupath_annotation,
     pred_images_overlap,
     cal_mode
+    export_geojson
 )
 
 from metrics import (
