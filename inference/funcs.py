@@ -137,6 +137,7 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
                     
                 except:
                     print('Cannot write '+entry[i].image_name+' , please import from JSON!')
+                    pass
 
 def count_straight_lines_probabilistic_hough(image, threshold=40, min_line_length=100, max_line_gap=10):
     """
