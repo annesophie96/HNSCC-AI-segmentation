@@ -10,7 +10,7 @@ from funcs import (
     get_dim,
     test_qupath_annotation,
     pred_images_overlap,
-    cal_mode
+    cal_mode,
     export_geojson
 )
 
