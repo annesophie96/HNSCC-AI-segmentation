@@ -3,7 +3,7 @@ def imageData = getCurrentImageData()
 
 // Define output path (relative to project)
 def name = GeneralTools.getNameWithoutExtension(imageData.getServer().getMetadata().getName())
-def pathOutput = buildFilePath(PROJECT_BASE_DIR, 'Tiles_0.9_256_176ov_all', name)
+def pathOutput = buildFilePath(PROJECT_BASE_DIR, 'tiles', name)
 mkdirs(pathOutput)
 
 // Define output resolution
@@ -22,7 +22,7 @@ new TileExporter(imageData)
     .imageExtension('.png')     // Define file extension for original pixels (often .tif, .jpg, '.png' or '.ome.tif')
     .tileSize(256)              // Define size of each tile, in pixels
     // In case there is ROI turn this on!!
-    .annotatedTilesOnly(false)// If true, only export tiles if there is a (labeled) annotation present.
+    .annotatedTilesOnly(true)// If true, only export tiles if there is a (labeled) annotation present.
     //
     .overlap(176)                // Define overlap, in pixel units at the export resolution
     .writeTiles(pathOutput)     // Write tiles to the specified directory

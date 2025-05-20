@@ -8,9 +8,9 @@ from funcs import (
     get_slide_path,
     get_image_path,
     get_dim,
-    test_qupath_annotation,
     pred_images_overlap,
-    cal_mode
+    cal_mode,
+    export_geojson
 )
 
 from metrics import (
@@ -52,10 +52,11 @@ def main(data_dir, model_path, qp, scaling_factor = 4.627844195912071):
         # Calculate the modes from the predictions
         print('Calculating the mode')
         modes = cal_mode(pred_normal16, height, width)
-
+        
         # Test and annotate the predictions in QuPath project
-        print('Importing raw prediction to qupath')
-        test_qupath_annotation(data_dir, qp, slide_path, modes, model='model_T16_Ov16')
+        print('exporting raw prediction')
+        #test_qupath_annotation(data_dir, qp, slide_path, modes, model='model_T16_Ov16')
+        export_geojson(data_dir, slide_path, modes, model='model_T16_Ov16')
 
         # Apply morphological operations at different kernel sizes to the prediction
         for i in [15, 30, 50]:
@@ -71,8 +72,9 @@ def main(data_dir, model_path, qp, scaling_factor = 4.627844195912071):
             filtered = cv2.erode(filtered, kernel, iterations=1)
 
             # Annotate the processed predictions in QuPath project with the kernel size in the model name
-            print(f'Importing filtered prediction K = {i} to qupath')
-            test_qupath_annotation(data_dir, qp, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
+            print(f'Exporting filtered prediction K = {i}')
+            #test_qupath_annotation(data_dir, qp, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
+            export_geojson(data_dir, slide_path, filtered, model=f'model_T16_Ov16_K{i}')
 
         print('**********SLIDE PREDICTION DONE**********')
 

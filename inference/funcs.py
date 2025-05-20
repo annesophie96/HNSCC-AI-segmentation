@@ -10,7 +10,7 @@ import cv2
 from tqdm import tqdm
 import re
 from paquo.projects import QuPathProject
-
+import geojson
 
 def get_slide_path(data_dir):
     """
@@ -92,40 +92,87 @@ def test_qupath_annotation(data_dir, qupath_project, slide_path, image, scaling_
     """
 
     # Open project in append-mode
-    with QuPathProject(qupath_project, mode="a") as qpout:
-        # Get first slide
-        entry = qpout.images
-        for i in range(len(entry)):
-            if os.path.join(data_dir, entry[i].image_name) == slide_path + '.svs':
-                print('Found the slide in qupath!')
-                contour_binary_mask = (image == 1).astype(np.uint8)
+    try:
+        with QuPathProject(qupath_project, mode="a") as qpout:
+            # Get first slide
+            entry = qpout.images
+            for i in range(len(entry)):
+                if os.path.join(data_dir, entry[i].image_name) == slide_path + '.svs':
+                    print('Found the slide in qupath!')
+                    contour_binary_mask = (image == 1).astype(np.uint8)
 
 
-                # Assuming you have contours already extracted
-                contours, hierarchy = cv2.findContours(contour_binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+                    # Assuming you have contours already extracted
+                    contours, hierarchy = cv2.findContours(contour_binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    
+    
+                    # Convert the contours to a list of Shapely polygons
+                    # check if its a list and change the -1
+                    polygons = [Polygon(contour.reshape(-1, 2)[:, ::1]) for contour in contours if len(contour) >= 3]
 
+                    # Create a MultiPolygon if there is more than one contour
+                    if len(polygons) > 1:
+                        multipolygon = MultiPolygon(polygons)
+                    elif len(polygons) == 1:
+                        multipolygon = polygons[0]
+                    else:
+                        print("No valid contours found.")
+                        return
 
-                # Convert the contours to a list of Shapely polygons
-                # check if its a list and change the -1
-                polygons = [Polygon(contour.reshape(-1, 2)[:, ::1]) for contour in contours if len(contour) >= 3]
+                    # Scale the annotation
+                    scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
+                    filename = data_dir + "/" + entry[i].image_name.split(".")[0] + "/" + entry[i].image_name.split(".")[0] + "_" + model + ".json"
+                
+                    #Create importable geojson
+                    json_polygon = geojson.dumps(scaled_multipolygon)
+                    outstring = '{"type":"Feature","properties":{"objectType": "annotation","name":"' + model + '","classification":{"name":"Tumor","color":[200,0,0]}},"geometry":' + json_polygon + '}'
+                
+                    with open(filename, 'w') as outfile:
+                        outfile.write(outstring)
 
-                # Create a MultiPolygon if there is more than one contour
-                if len(polygons) > 1:
-                    multipolygon = MultiPolygon(polygons)
-                elif len(polygons) == 1:
-                    multipolygon = polygons[0]
-                else:
-                    print("No valid contours found.")
-                    return
+                    try:
+                        # Add annotation to the QuPath project
+                        annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
+                        path_class=qpout.path_classes[0])
+                        annotation.name = model
+                    
+                    except Exception:
+                        print('Cannot write '+entry[i].image_name+' , please import from JSON!')
+                        pass
+    except Exception:
+        pass
 
-                # Scale the annotation
-                scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
+def export_geojson(data_dir, slide_path, image, scaling_factor=4.627844195912071, model='?'):
+    contour_binary_mask = (image == 1).astype(np.uint8)
+    # Assuming you have contours already extracted
+    contours, hierarchy = cv2.findContours(contour_binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    
+    # Convert the contours to a list of Shapely polygons
+    # check if its a list and change the -1
+    polygons = [Polygon(contour.reshape(-1, 2)[:, ::1]) for contour in contours if len(contour) >= 3]
+    
+    slide_name = slide_path.split('/')[-1].split('\\')[-1]
+    print("Slide name: "+slide_name)
 
-                # Add annotation to the QuPath project
-                annotation = entry[i].hierarchy.add_annotation(roi=scaled_multipolygon,
-                                                               path_class=qpout.path_classes[0])
+    # Create a MultiPolygon if there is more than one contour
+    if len(polygons) > 1:
+        multipolygon = MultiPolygon(polygons)
+    elif len(polygons) == 1:
+        multipolygon = polygons[0]
+    else:
+        print("No valid contours found.")
+        return
 
-                annotation.name = model
+    # Scale the annotation
+    scaled_multipolygon = affine_transform(multipolygon, [scaling_factor, 0, 0, scaling_factor, 0, 0])
+    filename = data_dir + "/" + slide_name + "/" + slide_name + "_" + model + ".json"
+                
+    #Create importable geojson
+    json_polygon = geojson.dumps(scaled_multipolygon)
+    outstring = '{"type":"Feature","properties":{"objectType": "annotation","name":"' + model + '","classification":{"name":"Tumor","color":[200,0,0]}},"geometry":' + json_polygon + '}'
+                
+    with open(filename, 'w') as outfile:
+        outfile.write(outstring)
 
 
 def count_straight_lines_probabilistic_hough(image, threshold=40, min_line_length=100, max_line_gap=10):
